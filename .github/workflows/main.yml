@@ -1,20 +1,30 @@
-name: Deploy GitHub Pages
+name: deploy site
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Télécharger le repository
-        uses: actions/checkout@v3
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Configurer GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload des fichiers du site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
 
       - name: Déployer sur GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs   
+        uses: actions/deploy-pages@v4
